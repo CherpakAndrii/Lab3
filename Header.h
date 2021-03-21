@@ -7,9 +7,9 @@
 #include <time.h>
 #include <stdio.h>
 
-std::vector<std::string> readlines(std::string name){
+vector<std::string> readlines(std::string name){
 	std::ifstream f(name);
-	std::vector<std::string> lines;
+	vector<std::string> lines;
 	int count = 0;
 	while (!f.eof()) {
 		std::string line;
@@ -29,9 +29,9 @@ void rstrip(std::string& s, char r = ' ') {
 	}
 }
 
-std::vector<std::string> f_processing(std::string name) {
-	std::vector <std::string> lines = readlines(name);
-	std::vector<std::string> matrix;
+vector<std::string> f_processing(std::string name) {
+	vector <std::string> lines = readlines(name);
+	vector<std::string> matrix;
 	for (std::string s : lines) {
 		std::string n_s = "";
 		for (int i = 0; i < int(s.length()); i += 2) { n_s += s[i]; }
@@ -44,17 +44,17 @@ std::vector<std::string> f_processing(std::string name) {
 class vertice{
 public:
 	int x;
-	int y;			//coordinates in the input matrix
+	int y;			//coordinates in input matrix
 	int min_dist;
 	bool passed;
 	int seq_num;	//the sequential number of vertice in path
-	std::vector<vertice> adjacent;	//the list of adjacent vertices
+	vector<vertice> adjacent;	//the list of adjacent vertices
 	vertice(int x1, int y1) { x = x1; y = y1; min_dist = 0; passed = false; }
 	void n_adj(vertice v) { adjacent.push_back(v);}	//that's for me, don't warry about)
 };
 
-std::vector<vertice> get_vertices(std::vector<std::string> matr) {
-	std::vector<vertice> vertice_list;
+vector<vertice> get_vertices(vector<std::string> matr) {
+	vector<vertice> vertice_list;
 	for (int i = 0; i < int(matr.size()); i++) {
 		for (int j = 0; j < int(matr[i].size()); j++) {
 			if (matr[i][j] == ' ') {
@@ -75,7 +75,7 @@ std::vector<vertice> get_vertices(std::vector<std::string> matr) {
 	return vertice_list;
 }
 
-void outp_path(std::vector<std::string> &inp_matrix, std::vector<vertice> vert) {
+void outp_path(vector<std::string> &inp_matrix, vector<vertice> vert) {
 	for (vertice v : vert) {
 		if (v.seq_num) {
 			char path_n = (v.seq_num<10?v.seq_num+48:v.seq_num+96);
