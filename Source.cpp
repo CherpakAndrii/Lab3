@@ -5,7 +5,7 @@ using namespace std;
 
 int main() {
 	vector<string> matr = f_processing("inp.txt");
-	std::vector<vertice> vertices = get_vertices(matr);
+	vector<vertice> vertices = get_vertices(matr);
 
 	/* Zeeelensky, there is some place for your code) */
 
