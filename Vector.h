@@ -3,12 +3,12 @@
 #include <iostream>
 
 template <typename T>
-class veñtor {
+class vector {
 public:
-    veñtor() = default;
-    explicit veñtor(size_t size);
-    veñtor(const veñtor& another);
-    ~veñtor();
+    vector() = default;
+    explicit vector(size_t size);
+    vector(const vector& another);
+    ~vector();
 
     T& operator[](size_t index);
 
@@ -37,41 +37,41 @@ private:
 };
 
 template <typename T>
-inline veñtor<T>::veñtor(size_t size) : data(new T[size]), sz(size), cp(size) {}
+inline vector<T>::vector(size_t size) : data(new T[size]), sz(size), cp(size) {}
 
 template <typename T>
-inline veñtor<T>::veñtor(const veñtor& another) {
+inline vector<T>::vector(const vector& another) {
     memcpy(this, &another, sizeof(another));
 }
 
 template <typename T>
-inline veñtor<T>::~veñtor() {
+inline vector<T>::~vector() {
     delete[] data;
 }
 
 template <typename T>
-inline T& veñtor<T>::operator[](size_t index) {
+inline T& vector<T>::operator[](size_t index) {
     return data[index];
 }
 
 template <typename T>
-inline size_t veñtor<T>::size(void) const {
+inline size_t vector<T>::size(void) const {
     return sz;
 }
 
 template <typename T>
-inline size_t veñtor<T>::capacity(void) const {
+inline size_t vector<T>::capacity(void) const {
     return cp;
 }
 
 template <typename T>
-inline void veñtor<T>::push_back(const T& value) {
+inline void vector<T>::push_back(const T& value) {
     expand_check();
     data[sz++] = value;
 }
 
 template <typename T>
-inline void veñtor<T>::expand_check(void) {
+inline void vector<T>::expand_check(void) {
     if (sz >= cp) {
         auto new_cap = cp == 0 ? 1 : 2 * cp;
         auto new_data = new T[new_cap];
@@ -83,24 +83,24 @@ inline void veñtor<T>::expand_check(void) {
 }
 
 template <typename T>
-inline T* veñtor<T>::begin(void) {
+inline T* vector<T>::begin(void) {
     return data;
 }
 
 template <typename T>
-inline T* veñtor<T>::end(void) {
+inline T* vector<T>::end(void) {
     return data + sz;
 }
 
 
 template <typename T>
-inline void veñtor<T>::clear(void) {
+inline void vector<T>::clear(void) {
     sz = 0;
 }
 
 
 template <typename T>
-inline void veñtor<T>::resize(size_t to_resize) {
+inline void vector<T>::resize(size_t to_resize) {
     data = (T*)realloc(data, to_resize * sizeof(T));
     if (cp < to_resize) {
         data = (T*)realloc(data, to_resize * sizeof(T));
@@ -110,7 +110,7 @@ inline void veñtor<T>::resize(size_t to_resize) {
 }
 
 template <typename T>
-inline void veñtor<T>::resize(size_t to_resize, T value) {
+inline void vector<T>::resize(size_t to_resize, T value) {
     if (cp < to_resize) {
         data = (T*)realloc(data, to_resize * sizeof(T));
         cp = to_resize;
@@ -122,7 +122,7 @@ inline void veñtor<T>::resize(size_t to_resize, T value) {
 }
 
 template <typename T>
-inline void veñtor<T>::reserve(size_t to_reserve) {
+inline void vector<T>::reserve(size_t to_reserve) {
     if (cp < to_reserve) {
         data = (T*)realloc(data, to_reserve * sizeof(T));
         cp = to_reserve;
@@ -130,6 +130,6 @@ inline void veñtor<T>::reserve(size_t to_reserve) {
 }
 
 template <typename T>
-inline void veñtor<T>::pop_back(void) {
+inline void vector<T>::pop_back(void) {
     sz--;
 }
