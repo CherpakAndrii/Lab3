@@ -1,5 +1,3 @@
-//often used libs, some important funcs from Python (input, split, arr sort, arr print)
-//all python functions are modified and adapted to c++ language
 #pragma once
 #include <string>
 #include <vector>
@@ -8,7 +6,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
-#include <iomanip>
 
 std::vector<std::string> readlines(std::string name){
 	std::ifstream f(name);
@@ -47,10 +44,11 @@ std::vector<std::string> f_processing(std::string name) {
 class vertice{
 public:
 	int x;
-	int y;
+	int y;			//координати в цій матриці, яка дається на вхід
 	int min_dist;
 	bool passed;
-	std::vector<vertice> adjacent;
-	vertice(int x1, int y1, int dist = 0) { x = x1; y = y1; min_dist = dist; passed = false; }
-	void n_adj(vertice v) { adjacent.push_back(v);}
+	int seq_num;	//ми там повинні будемо потім циферки розставити вздовж маршруту, пам'ятаєш? Так от, це вони.
+	std::vector<vertice> adjacent;	//список суміжних вершин, корисна річ))
+	vertice(int x1, int y1) { x = x1; y = y1; min_dist = 0; passed = false; }
+	void n_adj(vertice v) { adjacent.push_back(v);}	//це для мене, не парся)
 };
