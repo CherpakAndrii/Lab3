@@ -63,12 +63,15 @@ std::vector<vertice> get_vertices(std::vector<std::string> matr) {
 			}
 		}
 	}
-	for (int i = 0; i < vertice_list.size(); i++) {
-		for (int j = 0; j < vertice_list.size(); j++) {
+	for (int i = 0; i < int(vertice_list.size()); i++) {
+		for (int j = 0; j < int(vertice_list.size()); j++) {
 			if (vertice_list[i].x - vertice_list[j].x == 1 && vertice_list[i].y== vertice_list[j].y || vertice_list[i].y - vertice_list[j].y == 1 && vertice_list[i].x == vertice_list[j].x) {
 				vertice_list[i].n_adj(vertice_list[j]);
 				vertice_list[j].n_adj(vertice_list[i]);
 			}
 		}
 	}
+	return vertice_list;
 }
+
+void outp_way();
