@@ -133,3 +133,10 @@ template <typename T>
 inline void vector<T>::pop_back(void) {
     sz--;
 }
+
+template <typename T>
+inline std::istream& operator<< (std::ostream& stream, vector<T> items) {
+    for (T& item : items) {
+        cout << trash << ' ';
+    }
+}
