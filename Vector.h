@@ -137,6 +137,6 @@ inline void vector<T>::pop_back(void) {
 template <typename T>
 inline std::istream& operator<< (std::ostream& stream, vector<T> items) {
     for (T& item : items) {
-        cout << trash << ' ';
+        stream << item << ' ';
     }
 }
