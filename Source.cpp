@@ -1,6 +1,6 @@
 #include "Header.h"
 using namespace std;
 int main() {
-	vector<string> a = f_processing("inp.txt");
-	for (string s : a)cout << s << endl;
+	vector<string> matr = f_processing("inp.txt");
+	vector<vertice> vertices = get_vertices(matr);
 }

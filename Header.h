@@ -52,3 +52,23 @@ public:
 	vertice(int x1, int y1) { x = x1; y = y1; min_dist = 0; passed = false; }
 	void n_adj(vertice v) { adjacent.push_back(v);}	//це для мене, не парся)
 };
+
+std::vector<vertice> get_vertices(std::vector<std::string> matr) {
+	std::vector<vertice> vertice_list;
+	for (int i = 0; i < matr.size(); i++) {
+		for (int j = 0; j < matr[i].size(); j++) {
+			if (matr[i][j] == ' ') {
+				vertice v(i, j);
+				vertice_list.push_back(v);
+			}
+		}
+	}
+	for (int i = 0; i < vertice_list.size(); i++) {
+		for (int j = 0; j < vertice_list.size(); j++) {
+			if (vertice_list[i].x - vertice_list[j].x == 1 && vertice_list[i].y== vertice_list[j].y || vertice_list[i].y - vertice_list[j].y == 1 && vertice_list[i].x == vertice_list[j].x) {
+				vertice_list[i].n_adj(vertice_list[j]);
+				vertice_list[j].n_adj(vertice_list[i]);
+			}
+		}
+	}
+}
