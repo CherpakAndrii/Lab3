@@ -17,8 +17,8 @@ public:
 	T front();
 	T back();
 	size_t size();
-	//bool empty();
-	//void swap(Queue& another);
+	bool empty();
+	void swap(Queue<T>& another);
 };
 
 //методы класса очередь
@@ -62,3 +62,20 @@ inline size_t Queue<T>::size() {
 	return (all - used);
 }
 
+template <typename T>
+inline bool Queue<T>::empty() {
+	return (all - used) > 0;
+}
+
+template <typename T>
+inline void Queue<T>::swap(Queue<T>& another) {
+	auto buffData = data;
+	auto buffAll = all;
+	auto buffUsed = used;
+	data = another.data;
+	all = another.all;
+	used = another.used;
+	another.data = buffData;
+	another.all = buffAll;
+	another.used = buffUsed;
+}
