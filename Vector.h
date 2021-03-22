@@ -28,6 +28,9 @@ public:
     void pop_back(void);
 
     void clear(void);
+
+    T& front(void);
+    T& back(void);
 private:
     T* data = nullptr;
     size_t sz = 0;
@@ -132,6 +135,16 @@ inline void vector<T>::reserve(size_t to_reserve) {
 template <typename T>
 inline void vector<T>::pop_back(void) {
     sz--;
+}
+
+template <typename T>
+inline T& vector<T>::front() {
+    return &data[0];
+}
+
+template <typename T>
+inline T& vector<T>::back() {
+    return &data[sz - 1];
 }
 
 template <typename T>
