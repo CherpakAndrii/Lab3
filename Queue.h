@@ -12,14 +12,15 @@ public:
 	Queue();
 	~Queue();
 	void push(T val);
+	T pop();
 	//T front();
-	//T pop();
 	//T back();
 	//bool empty();
 	//size_t size();
 };
 
 //методы класса очередь
+
 template <typename T>
 inline Queue<T>::Queue() {
 	data = new T[0];
@@ -30,4 +31,16 @@ inline Queue<T>::Queue() {
 template <typename T>
 inline Queue<T>::~Queue() {
 	delete[] data;
+}
+
+template <typename T>
+inline void Queue<T>::push(T val) {
+	data = (T*)realloc(data, ++all * sizeof(T));
+	data[(all - used) - 1] = val;
+}
+
+template <typename T>
+inline T Queue<T>::pop() {
+	T val = data[used++];
+	return val;
 }
