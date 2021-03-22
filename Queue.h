@@ -1,6 +1,7 @@
 #pragma once
 
 //ну тут вроде все и так понятно
+
 //класс очередь
 template <typename T> 
 class Queue {
@@ -13,10 +14,11 @@ public:
 	~Queue();
 	void push(T val);
 	T pop();
-	//T front();
-	//T back();
+	T front();
+	T back();
+	size_t size();
 	//bool empty();
-	//size_t size();
+	//void swap(Queue& another);
 };
 
 //методы класса очередь
@@ -44,3 +46,19 @@ inline T Queue<T>::pop() {
 	T val = data[used++];
 	return val;
 }
+
+template <typename T>
+inline T Queue<T>::front() {
+	return data[used];
+}
+
+template <typename T>
+inline T Queue<T>::back() {
+	return data[all - 1];
+}
+
+template <typename T>
+inline size_t Queue<T>::size() {
+	return (all - used);
+}
+
