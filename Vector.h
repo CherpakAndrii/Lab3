@@ -47,16 +47,12 @@ template <typename T>
 inline vector<T>::vector(size_t nsize) {
     sz = nsize;
     cp = nsize;
-    //data = new T[nsize];
-    malloc(sizeof(T));
+    data = new T[nsize];
 }
 
 template <typename T>
 inline vector<T>::vector(const vector& another) {
-    //memcpy(this, &another, sizeof(another));
-    data = another.data;
-    sz = another.sz;
-    cp = another.cp;
+    memcpy(this, &another, sizeof(another));
 }
 
 template <typename T>
