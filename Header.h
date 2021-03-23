@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "Vector.h"
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
@@ -48,9 +49,8 @@ public:
 	int min_dist;
 	bool passed;
 	vector<int> path;
-	int seq_num;	//the sequential number of vertice in path
 	vector<std::pair<int, int>> adjacent;	//the list of adjacent vertices' index and path len
-	vertice(int x1, int y1) { x = x1; y = y1; min_dist = 0; passed = false; }
+	vertice(int x1, int y1) { x = x1; y = y1; min_dist = 1000000; passed = false; }
 	void n_adj(vertice v, int n) { adjacent.push_back({v, n});}	//that's for me, don't warry about)
 };
 
@@ -91,10 +91,11 @@ void outp_path(vector<std::string> &inp_matrix, vector<vertice> vert) {
 	}
 }
 
-void remove_some_vertices(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin){
+void remove_some_vertices(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin, int &fin_ind){
 	for (int i = 0; i<vert.size(); i++){
-		vertice v = vert[i];
-		if (v.x == x_st&&v.y == y_st||v.x == x_fin&&v.y == y_fin) continue;
+		vertice &v = vert[i];
+		if (v.x == x_st&&v.y == y_st){ v.min_dist = 0; v.path.append(i); continue; }
+		if(v.x == x_fin&&v.y == y_fin){ fin_ind = i; continue; }
 		if (v.adjacent.size()!=2||vert[v.adjacent[0].first].x!=vert[v.adjacent[1].first].x && vert[v.adjacent[0].first].y!=vert[v.adjacent[1].first].y) continue;
 		vertice &adj1 = vert[v.adjacent[0].first];
 		vertice &adj2 = vert[v.adjacent[1].first];
@@ -104,4 +105,33 @@ void remove_some_vertices(vector<vertice> &vert, int x_st, int y_st, int x_fin, 
 		adj2.adjacent.erase(find(adj2.adjacent.begin(), adj2.adjacent.end(), {i, v.adjacent[1].second}));
 		vert.erase(vert.begin()+i);
 	}
+}
+
+int min(vector<vertice> v) {
+    int min_index;
+    for (int i = 0; i < n; i++) {
+        min_index = i;
+        if (!v[i].passed) break;
+    }
+    for (int i = 0; i < int(v.size()); i++) {
+        if (!v[i].passed && v[i].min_dist < v[min_index].min_dist) min_index = i;
+    }
+    return min_index;
+}
+
+int Deikstra(int finish, vector<vertice> &vertices) {
+    while (1) {
+        int a = min(vertices);
+        if (vertices[a].passed) break;
+        for (pair<int, int> p : vertices[a].adjacent) {
+            if (vertices[a].min_dist + p.second < vertices[p.first].min_dist) {
+                vertices[p.first].min_dist = vertices[a].min_dist + p.second;
+                vertices[p.first].path.erase(vertices[p.first].path.begin(), vertices[p.first].path.end());
+                for (int w : vertices[a].path) vertices[p.first].path.push_back(w);
+                vertices[p.first].path.push_back(a+1);
+            }
+        }
+        vertices[a].passed = true;
+        if (a==finish) return vertices[finish].min_dist;
+    }
 }
