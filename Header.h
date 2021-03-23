@@ -48,7 +48,7 @@ public:
 	int min_dist;
 	bool passed;
 	int seq_num;	//the sequential number of vertice in path
-	vector<std::pair<vertice, int>> adjacent;	//the list of adjacent vertices
+	vector<std::pair<int, int>> adjacent;	//the list of adjacent vertices' index and path len
 	vertice(int x1, int y1) { x = x1; y = y1; min_dist = 0; passed = false; }
 	void n_adj(vertice v, int n) { adjacent.push_back({v, n});}	//that's for me, don't warry about)
 };
@@ -67,8 +67,8 @@ vector<vertice> get_vertices(vector<std::string> matr) {
 		for (int j = 0; j < int(vertice_list.size()); j++) {
 			if (vertice_list[i].x - vertice_list[j].x == 1 && vertice_list[i].y== vertice_list[j].y ||
 					vertice_list[i].y - vertice_list[j].y == 1 && vertice_list[i].x == vertice_list[j].x) {
-				vertice_list[i].n_adj(vertice_list[j], 1);
-				vertice_list[j].n_adj(vertice_list[i], 0);
+				vertice_list[i].n_adj(j, 1);
+				vertice_list[j].n_adj(i, 0);
 			}
 		}
 	}
@@ -90,8 +90,11 @@ void outp_path(vector<std::string> &inp_matrix, vector<vertice> vert) {
 	}
 }
 
-void remove_some_vertices(vector<vertice> vert){
-	for (vertice v : vert){
-		
+void remove_some_vertices(vector<vertice> vert, int x_st, int y_st, int x_fin, int y_fin){
+	for (int i = 0; i<vert.size(); i++){
+		vertice v = vert[i];
+		if (v.x == x_st&&v.y == y_st||v.x == x_fin&&v.y == y_fin) continue;
+		if (v.adjacent.size()!=2||vert[v.adjacent[0].first].x!=vert[v.adjacent[1].first].x && vert[v.adjacent[0].first].y!=vert[v.adjacent[1].first].y) continue;
+		/*to be continued*/
 	}
 }
