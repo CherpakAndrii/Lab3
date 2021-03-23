@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <algorithm>
 
 template <typename T>
 class vector {
@@ -40,11 +41,19 @@ private:
 };
 
 template <typename T>
-inline vector<T>::vector(size_t size) : data(new T[size]), sz(size), cp(size) {}
+inline vector<T>::vector(size_t nsize) {
+    sz = nsize;
+    cp = nsize;
+    //data = new T[nsize];
+    malloc(sizeof(T));
+}
 
 template <typename T>
 inline vector<T>::vector(const vector& another) {
-    memcpy(this, &another, sizeof(another));
+    //memcpy(this, &another, sizeof(another));
+    data = another.data;
+    sz = another.sz;
+    cp = another.cp;
 }
 
 template <typename T>
@@ -69,7 +78,13 @@ inline size_t vector<T>::capacity(void) const {
 
 template <typename T>
 inline void vector<T>::push_back(const T& value) {
-    expand_check();
+    if (sz >= cp) {
+        cp = (cp == 0) ? 1 : (2 * cp);
+        T* new_data = new T[cp];
+        for (int i = 0; i < sz; i++) new_data[i] = data[i];
+        delete[] data;
+        data = new_data;
+    }
     data[sz++] = value;
 }
 
@@ -77,10 +92,11 @@ template <typename T>
 inline void vector<T>::expand_check(void) {
     if (sz >= cp) {
         auto new_cap = cp == 0 ? 1 : 2 * cp;
-        auto new_data = new T[new_cap];
-        std::move(begin(), end(), new_data);
-        delete[] data;
-        data = new_data;
+        //auto new_data = new T[new_cap];
+        //std::move(begin(), end(), new_data);
+        data = (T*)realloc((void*)data, new_cap * sizeof(T));
+        //delete[] data;
+        //data = new_data;
         cp = new_cap;
     }
 }
