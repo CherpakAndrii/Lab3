@@ -47,6 +47,7 @@ public:
 	int y;			//coordinates in input matrix
 	int min_dist;
 	bool passed;
+	vector<int> path;
 	int seq_num;	//the sequential number of vertice in path
 	vector<std::pair<int, int>> adjacent;	//the list of adjacent vertices' index and path len
 	vertice(int x1, int y1) { x = x1; y = y1; min_dist = 0; passed = false; }
@@ -90,11 +91,17 @@ void outp_path(vector<std::string> &inp_matrix, vector<vertice> vert) {
 	}
 }
 
-void remove_some_vertices(vector<vertice> vert, int x_st, int y_st, int x_fin, int y_fin){
+void remove_some_vertices(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin){
 	for (int i = 0; i<vert.size(); i++){
 		vertice v = vert[i];
 		if (v.x == x_st&&v.y == y_st||v.x == x_fin&&v.y == y_fin) continue;
 		if (v.adjacent.size()!=2||vert[v.adjacent[0].first].x!=vert[v.adjacent[1].first].x && vert[v.adjacent[0].first].y!=vert[v.adjacent[1].first].y) continue;
-		/*to be continued*/
+		vertice &adj1 = vert[v.adjacent[0].first];
+		vertice &adj2 = vert[v.adjacent[1].first];
+		adj1.n_adj(v.adjacent[1].first, v.adjacent[1].second+v.adjacent[0].second);
+		adj2.n_adj(v.adjacent[0].first, v.adjacent[1].second+v.adjacent[0].second);
+		adj1.adjacent.erase(find(adj1.adjacent.begin(), adj1.adjacent.end(), {i, v.adjacent[0].second}));
+		adj2.adjacent.erase(find(adj2.adjacent.begin(), adj2.adjacent.end(), {i, v.adjacent[1].second}));
+		vert.erase(vert.begin()+i);
 	}
 }
