@@ -51,7 +51,7 @@ public:
 	vector<int> path;
 	vector<std::pair<int, int>> adjacent;	//the list of adjacent vertices' index and path len
 	vertice(int x1, int y1) { x = x1; y = y1; min_dist = 1000000; passed = false; }
-	void n_adj(vertice v, int n) { adjacent.push_back({v, n});}	//that's for me, don't warry about)
+	void n_adj(int v, int n) { adjacent.push_back({v, n}); }	//that's for me, don't warry about)
 };
 
 vector<vertice> get_vertices(vector<std::string> matr) {
@@ -76,7 +76,7 @@ vector<vertice> get_vertices(vector<std::string> matr) {
 	return vertice_list;
 }
 
-void outp_path(vector<std::string> &inp_matrix, vector<vertice> vert) {
+/*void outp_path(vector<std::string> &inp_matrix, vector<vertice> vert) {
 	for (vertice v : vert) {
 		if (v.seq_num) {
 			char path_n = (v.seq_num<10?v.seq_num+48:v.seq_num+96);
@@ -89,27 +89,27 @@ void outp_path(vector<std::string> &inp_matrix, vector<vertice> vert) {
 		}
 		std::cout << std::endl;
 	}
-}
+}*/
 
 void remove_some_vertices(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin, int &fin_ind){
 	for (int i = 0; i<vert.size(); i++){
 		vertice &v = vert[i];
-		if (v.x == x_st&&v.y == y_st){ v.min_dist = 0; v.path.append(i); continue; }
+		if (v.x == x_st&&v.y == y_st){ v.min_dist = 0; v.path.push_back(i); continue; }
 		if(v.x == x_fin&&v.y == y_fin){ fin_ind = i; continue; }
 		if (v.adjacent.size()!=2||vert[v.adjacent[0].first].x!=vert[v.adjacent[1].first].x && vert[v.adjacent[0].first].y!=vert[v.adjacent[1].first].y) continue;
 		vertice &adj1 = vert[v.adjacent[0].first];
 		vertice &adj2 = vert[v.adjacent[1].first];
 		adj1.n_adj(v.adjacent[1].first, v.adjacent[1].second+v.adjacent[0].second);
 		adj2.n_adj(v.adjacent[0].first, v.adjacent[1].second+v.adjacent[0].second);
-		adj1.adjacent.erase(find(adj1.adjacent.begin(), adj1.adjacent.end(), {i, v.adjacent[0].second}));
-		adj2.adjacent.erase(find(adj2.adjacent.begin(), adj2.adjacent.end(), {i, v.adjacent[1].second}));
+		adj1.adjacent.erase(find(adj1.adjacent.begin(), adj1.adjacent.end(), pair<int, int>(i, v.adjacent[0].second)));
+		adj2.adjacent.erase(find(adj2.adjacent.begin(), adj2.adjacent.end(), pair<int, int>(i, v.adjacent[1].second)));
 		vert.erase(vert.begin()+i);
 	}
 }
 
 int min(vector<vertice> v) {
     int min_index;
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < int(v.size()); i++) {
         min_index = i;
         if (!v[i].passed) break;
     }
