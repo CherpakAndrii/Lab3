@@ -101,8 +101,8 @@ void remove_some_vertices(vector<vertice> &vert, int x_st, int y_st, int x_fin, 
 		vertice &adj2 = vert[v.adjacent[1].first];
 		adj1.n_adj(v.adjacent[1].first, v.adjacent[1].second+v.adjacent[0].second);
 		adj2.n_adj(v.adjacent[0].first, v.adjacent[1].second+v.adjacent[0].second);
-		adj1.adjacent.erase(find(adj1.adjacent.begin(), adj1.adjacent.end(), pair<int, int>(i, v.adjacent[0].second)));
-		adj2.adjacent.erase(find(adj2.adjacent.begin(), adj2.adjacent.end(), pair<int, int>(i, v.adjacent[1].second)));
+		adj1.adjacent.era²se(find(adj1.adjacent.begin(), adj1.adjacent.end(), std::pair<int, int>(i, v.adjacent[0].second)));
+		adj2.adjacent.erase(find(adj2.adjacent.begin(), adj2.adjacent.end(), std::pair<int, int>(i, v.adjacent[1].second)));
 		vert.erase(vert.begin()+i);
 	}
 }
@@ -123,7 +123,7 @@ int Deikstra(int finish, vector<vertice> &vertices) {
     while (1) {
         int a = min(vertices);
         if (vertices[a].passed) break;
-        for (pair<int, int> p : vertices[a].adjacent) {
+        for (std::pair<int, int> p : vertices[a].adjacent) {
             if (vertices[a].min_dist + p.second < vertices[p.first].min_dist) {
                 vertices[p.first].min_dist = vertices[a].min_dist + p.second;
                 vertices[p.first].path.erase(vertices[p.first].path.begin(), vertices[p.first].path.end());
