@@ -103,7 +103,7 @@ void remove_some_vertices(vector<vertice> &vert, int x_st, int y_st, int x_fin, 
 		adj2.n_adj(v.adjacent[0].first, v.adjacent[1].second+v.adjacent[0].second);
 		adj1.adjacent.erase(find(adj1.adjacent.begin(), adj1.adjacent.end(), {i, v.adjacent[0].second}));
 		adj2.adjacent.erase(find(adj2.adjacent.begin(), adj2.adjacent.end(), {i, v.adjacent[1].second}));
-		vert.erase(i);
+		vert.erase(vert.begin()+i);
 	}
 }
 
