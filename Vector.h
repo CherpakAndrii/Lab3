@@ -32,6 +32,9 @@ public:
 
     T& front(void);
     T& back(void);
+
+    void erase(size_t index);
+    void erase(size_t left, size_t right);
 private:
     T* data = nullptr;
     size_t sz = 0;
@@ -117,10 +120,8 @@ inline void vector<T>::clear(void) {
     sz = 0;
 }
 
-
 template <typename T>
 inline void vector<T>::resize(size_t to_resize) {
-    data = (T*)realloc(data, to_resize * sizeof(T));
     if (cp < to_resize) {
         data = (T*)realloc(data, to_resize * sizeof(T));
         cp = to_resize;
@@ -161,6 +162,23 @@ inline T& vector<T>::front() {
 template <typename T>
 inline T& vector<T>::back() {
     return &data[sz - 1];
+}
+
+template <typename T>
+inline void vector<T>::erase(size_t index) {
+    for (int i = index; i < sz - 1; i++) {
+        data[i] = data[i + 1];
+    }
+    sz--;
+}
+
+template <typename T>
+inline void vector<T>::erase(size_t left, size_t right) {
+    int dif = right - left + 1;
+    for (int i = right + 1; i < sz; i++) {
+        data[i - dif] = data[i];
+    }
+    sz -= (right - left + 1);
 }
 
 template <typename T>
