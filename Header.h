@@ -54,7 +54,7 @@ public:
 };
 
 int is_free(vector<std::string> matr, int xs, int ys, int xf, int yf) {
-	if (xs==xf){
+	if (xs == xf) {
 		int y1 = min(ys, yf);
 		int y2 = max(ys, yf);
 		for (int j = y1; j < y2; j++) {
@@ -62,7 +62,7 @@ int is_free(vector<std::string> matr, int xs, int ys, int xf, int yf) {
 		}
 		return y2 - y1;
 	}
-	else {
+	else if (ys == yf) {
 		int x1 = min(xs, xf);
 		int x2 = max(xs, xf);
 		for (int i = x1; i < x2; i++) {
@@ -70,7 +70,7 @@ int is_free(vector<std::string> matr, int xs, int ys, int xf, int yf) {
 		}
 		return x2 - x1;
 	}
-
+	else return 0;
 }
 
 vector<vertice> get_vertices(vector<std::string> matr, int x_st, int y_st, int x_fin, int y_fin) {
@@ -108,7 +108,7 @@ void outp_path(vector<std::string> &matrix, vector<vertice> vert, vector<int> pa
 			}
 		}
 		else {
-			for (int x = a.x; (a.x < b.x ? (x < b.x) : (x > b.x)); (a.x < b.x ? (x++) : (x--))) {
+			for (int x = (a.x < b.x ? (a.x + 1) : (a.x - 1)); (a.x < b.x ? (x <= b.x) : (x >= b.x)); (a.x < b.x ? (x++) : (x--))) {
 				char c = (counter + 1 < 10 ? counter + 49 : counter + 88);
 				matrix[x][a.y] = c;
 				counter++;
@@ -160,8 +160,7 @@ int Deikstra(int finish, vector<vertice> &vertices) {
         for (std::pair<int, int> p : vertices[a].adjacent) {
             if (vertices[a].min_dist + p.second < vertices[p.first].min_dist) {
                 vertices[p.first].min_dist = vertices[a].min_dist + p.second;
-                vertices[p.first].path.erase(vertices[p.first].path.begin(), vertices[p.first].path.end());
-                for (int w : vertices[a].path) vertices[p.first].path.push_back(w);
+                vertices[p.first].path= vertices[a].path;
                 vertices[p.first].path.push_back(a+1);
             }
         }
