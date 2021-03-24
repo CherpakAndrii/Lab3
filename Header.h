@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "Vector.h"
+#include <vector>
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -8,15 +8,15 @@
 #include <time.h>
 #include <stdio.h>
 
+using namespace std;
+
 vector<std::string> readlines(std::string name){
 	std::ifstream f(name);
 	vector<std::string> lines;
-	int count = 0;
 	while (!f.eof()) {
 		std::string line;
 		getline(f, line);
 		lines.push_back(line);
-		count++;
 	}
 	f.close();
 	return lines;
@@ -54,11 +54,31 @@ public:
 	void n_adj(int v, int n) { adjacent.push_back({v, n}); }	//that's for me, don't warry about)
 };
 
-vector<vertice> get_vertices(vector<std::string> matr) {
+int is_free(vector<std::string> matr, int xs, int ys, int xf, int yf) {
+	if (xs==xf){
+		int y1 = min(ys, yf); 
+		int y2 = max(ys, yf);
+		for (int j = y1; j < y2; j++) {
+			if (matr[xs][j] == 'X')return false;
+		}
+		return y2 - y1;
+	}
+	else {
+		int x1 = min(xs, xf);
+		int x2 = max(xs, xf);
+		for (int i = x1; i < x2; i++) {
+			if (matr[i][ys] == 'X')return false;
+		}
+		return x2 - x1;
+	}
+	
+}
+
+vector<vertice> get_vertices(vector<std::string> matr, int x_st, int y_st, int x_fin, int y_fin) {
 	vector<vertice> vertice_list;
-	for (int i = 0; i < int(matr.size()); i++) {
-		for (int j = 0; j < int(matr[i].size()); j++) {
-			if (matr[i][j] == ' ') {
+	for (int i = 1; i < int(matr.size()-1); i++) {
+		for (int j = 1; j < int(matr[i].size()-1); j++) {
+			if (matr[i][j] == ' ' && ((i == x_st&&j==y_st|| i == x_fin && j == y_fin)||!(matr[i-1][j]==' ' && matr[i+1][j]==' ' || matr[i][j-1] == ' ' && matr[i][j+1] == ' ')|| (matr[i - 1][j] == ' ' && matr[i + 1][j] == ' ' && (matr[i][j - 1] == ' ' || matr[i][j + 1] == ' '))|| ((matr[i - 1][j] == ' ' || matr[i + 1][j] == ' ') && matr[i][j - 1] == ' ' && matr[i][j + 1] == ' '))) {
 				vertice v(i, j);
 				vertice_list.push_back(v);
 			}
@@ -66,45 +86,60 @@ vector<vertice> get_vertices(vector<std::string> matr) {
 	}
 	for (int i = 0; i < int(vertice_list.size()); i++) {
 		for (int j = 0; j < int(vertice_list.size()); j++) {
-			if (vertice_list[i].x - vertice_list[j].x == 1 && vertice_list[i].y== vertice_list[j].y ||
-					vertice_list[i].y - vertice_list[j].y == 1 && vertice_list[i].x == vertice_list[j].x) {
-				vertice_list[i].n_adj(j, 1);
-				vertice_list[j].n_adj(i, 0);
+			int w = is_free(matr, vertice_list[i].x, vertice_list[i].y, vertice_list[j].x, vertice_list[j].y);
+			if ((vertice_list[i].y == vertice_list[j].y || vertice_list[i].x == vertice_list[j].x) && w) {
+				vertice_list[i].n_adj(j, w);
+				vertice_list[j].n_adj(i, w);
 			}
 		}
 	}
 	return vertice_list;
 }
 
-/*void outp_path(vector<std::string> &inp_matrix, vector<vertice> vert) {
-	for (vertice v : vert) {
-		if (v.seq_num) {
-			char path_n = (v.seq_num<10?v.seq_num+48:v.seq_num+96);
-			inp_matrix[v.x][v.y] = path_n;
+void outp_path(vector<std::string> &matrix, vector<vertice> vert, vector<int> path) {
+	int counter = 0;
+	for (int i = 1; i < int(path.size()); i++) {
+		vertice a = vert[path[i-1]];
+		vertice b = vert[path[i]];
+		if (a.x == b.x) {
+			for (int y = a.y; (a.y < b.y ? (y < b.y) : (y > b.y)); (a.y < b.y ? (y++) : (y--))) {
+				char c = (counter + 1 < 10 ? counter + 49 : counter + 88);
+				matrix[a.x][y] = c;
+				counter++;
+			}
+		}
+		else {
+			for (int x = a.x; (a.x < b.x ? (x < b.x) : (x > b.x)); (a.x < b.x ? (x++) : (x--))) {
+				char c = (counter + 1 < 10 ? counter + 49 : counter + 88);
+				matrix[x][a.y] = c;
+				counter++;
+			}
 		}
 	}
-	for (std::string line : inp_matrix) {
-		for (int i = 0; i < int(line.length()); i++) {
-			std::cout << line[i] << " ";
-		}
-		std::cout << std::endl;
-	}
-}*/
 
-void remove_some_vertices(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin, int &fin_ind){
-	for (int i = 0; i<vert.size(); i++){
+	for (int i = 0; i < int(matrix.size()); i++) {
+		for (int j = 0; j < matrix[i].length(); j++) {
+			cout << matrix[i][j] << " ";
+		}
+		cout << endl;
+	}
+}
+
+int find(vector<pair<int, int>> vect, pair<int, int> val) {
+	for (int i = 0; i < vect.size(); i++) {
+		if (vect[i].first == val.first && vect[i].second == val.second) return i;
+	}
+	return -1;
+}
+
+int get_fin_ind(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin){
+	int f_ind = -1;
+	for (int i = 0; i< vert.size(); i++){
 		vertice &v = vert[i];
 		if (v.x == x_st&&v.y == y_st){ v.min_dist = 0; v.path.push_back(i); continue; }
-		if(v.x == x_fin&&v.y == y_fin){ fin_ind = i; continue; }
-		if (v.adjacent.size()!=2||vert[v.adjacent[0].first].x!=vert[v.adjacent[1].first].x && vert[v.adjacent[0].first].y!=vert[v.adjacent[1].first].y) continue;
-		vertice &adj1 = vert[v.adjacent[0].first];
-		vertice &adj2 = vert[v.adjacent[1].first];
-		adj1.n_adj(v.adjacent[1].first, v.adjacent[1].second+v.adjacent[0].second);
-		adj2.n_adj(v.adjacent[0].first, v.adjacent[1].second+v.adjacent[0].second);
-		adj1.adjacent.era²se(find(adj1.adjacent.begin(), adj1.adjacent.end(), std::pair<int, int>(i, v.adjacent[0].second)));
-		adj2.adjacent.erase(find(adj2.adjacent.begin(), adj2.adjacent.end(), std::pair<int, int>(i, v.adjacent[1].second)));
-		vert.erase(vert.begin()+i);
+		if (v.x == x_fin && v.y == y_fin) { f_ind = i; continue; }
 	}
+	return f_ind;
 }
 
 int min(vector<vertice> v) {
@@ -122,7 +157,7 @@ int min(vector<vertice> v) {
 int Deikstra(int finish, vector<vertice> &vertices) {
     while (1) {
         int a = min(vertices);
-        if (vertices[a].passed) break;
+        if (vertices[a].passed) return -1;
         for (std::pair<int, int> p : vertices[a].adjacent) {
             if (vertices[a].min_dist + p.second < vertices[p.first].min_dist) {
                 vertices[p.first].min_dist = vertices[a].min_dist + p.second;
