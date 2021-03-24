@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
@@ -56,7 +55,7 @@ public:
 
 int is_free(vector<std::string> matr, int xs, int ys, int xf, int yf) {
 	if (xs==xf){
-		int y1 = min(ys, yf); 
+		int y1 = min(ys, yf);
 		int y2 = max(ys, yf);
 		for (int j = y1; j < y2; j++) {
 			if (matr[xs][j] == 'X')return false;
@@ -71,7 +70,7 @@ int is_free(vector<std::string> matr, int xs, int ys, int xf, int yf) {
 		}
 		return x2 - x1;
 	}
-	
+
 }
 
 vector<vertice> get_vertices(vector<std::string> matr, int x_st, int y_st, int x_fin, int y_fin) {
@@ -97,12 +96,12 @@ vector<vertice> get_vertices(vector<std::string> matr, int x_st, int y_st, int x
 }
 
 void outp_path(vector<std::string> &matrix, vector<vertice> vert, vector<int> path) {
-	int counter = 0;
+	int counter = 1;
 	for (int i = 1; i < int(path.size()); i++) {
 		vertice a = vert[path[i-1]];
 		vertice b = vert[path[i]];
 		if (a.x == b.x) {
-			for (int y = a.y; (a.y < b.y ? (y < b.y) : (y > b.y)); (a.y < b.y ? (y++) : (y--))) {
+			for (int y = (a.y < b.y ? (a.y+1) : (a.y-1)); (a.y < b.y ? (y <= b.y) : (y >= b.y)); (a.y < b.y ? (y++) : (y--))) {
 				char c = (counter + 1 < 10 ? counter + 49 : counter + 88);
 				matrix[a.x][y] = c;
 				counter++;
