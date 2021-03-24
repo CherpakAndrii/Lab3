@@ -58,7 +58,7 @@ int is_free(vector<std::string> matr, int xs, int ys, int xf, int yf) {
 		int y1 = min(ys, yf);
 		int y2 = max(ys, yf);
 		for (int j = y1; j < y2; j++) {
-			if (matr[xs][j] == 'X')return false;
+			if (matr[xs][j] == 'X')return 0;
 		}
 		return y2 - y1;
 	}
@@ -66,7 +66,7 @@ int is_free(vector<std::string> matr, int xs, int ys, int xf, int yf) {
 		int x1 = min(xs, xf);
 		int x2 = max(xs, xf);
 		for (int i = x1; i < x2; i++) {
-			if (matr[i][ys] == 'X')return false;
+			if (matr[i][ys] == 'X')return 0;
 		}
 		return x2 - x1;
 	}
@@ -84,7 +84,7 @@ vector<vertice> get_vertices(vector<std::string> matr, int x_st, int y_st, int x
 		}
 	}
 	for (int i = 0; i < int(vertice_list.size()); i++) {
-		for (int j = 0; j < int(vertice_list.size()); j++) {
+		for (int j = i+1; j < int(vertice_list.size()); j++) {
 			int w = is_free(matr, vertice_list[i].x, vertice_list[i].y, vertice_list[j].x, vertice_list[j].y);
 			if ((vertice_list[i].y == vertice_list[j].y || vertice_list[i].x == vertice_list[j].x) && w) {
 				vertice_list[i].n_adj(j, w);
