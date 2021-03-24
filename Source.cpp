@@ -17,6 +17,7 @@ int main() {
 	if (fin_ind<0) { cout << "Error" << endl; exit(0); }
 	dist = Deikstra(fin_ind, vertices);
 	if (dist < 0 || dist == 1000000) { cout << "The path doesn't exist!" << endl; exit(0); }
-	outp_path(matr, vertices, vertices[fin_ind].path);
+	matr[x_st][y_st] = 48;
+	outp_path(matr, vertices, fin_ind);
 }
 

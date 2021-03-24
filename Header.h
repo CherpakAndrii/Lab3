@@ -47,7 +47,7 @@ public:
 	int y = 0;			//coordinates in input matrix
 	int min_dist = 1000000;
 	bool passed = false;
-	vector<int> path;
+	int last;
 	vector<std::pair<int, int>> adjacent;	//the list of adjacent vertices' index and path len
 	vertice(int x1, int y1) { x = x1; y = y1; }
 	vertice() = default;
@@ -96,22 +96,26 @@ vector<vertice> get_vertices(vector<std::string> matr, int x_st, int y_st, int x
 	return vertice_list;
 }
 
-void outp_path(vector<std::string> &matrix, vector<vertice> vert, vector<int> path) {
+void outp_path(vector<std::string> &matrix, vector<vertice> vert, int finish) {
+	vector<int> path;
+	int last = finish;
+	while (last < 999999) {
+		path.push_back(last);
+		last = vert[last].last;
+	}
 	int counter = 1;
-	for (int i = 1; i < int(path.size()); i++) {
-		vertice a = vert[path[i-1]];
-		vertice b = vert[path[i]];
+	for (int i = int(path.size() - 1); i > 0; i--) {
+		vertice a = vert[path[i]];
+		vertice b = vert[path[i-1]];
 		if (a.x == b.x) {
 			for (int y = (a.y < b.y ? (a.y+1) : (a.y-1)); (a.y < b.y ? (y <= b.y) : (y >= b.y)); (a.y < b.y ? (y++) : (y--))) {
-				char c = (counter + 1 < 10 ? counter + 49 : counter + 88);
-				matrix[a.x][y] = c;
+				matrix[a.x][y] = (counter < 10 ? counter + 48 : counter + 87);
 				counter++;
 			}
 		}
 		else {
 			for (int x = (a.x < b.x ? (a.x + 1) : (a.x - 1)); (a.x < b.x ? (x <= b.x) : (x >= b.x)); (a.x < b.x ? (x++) : (x--))) {
-				char c = (counter + 1 < 10 ? counter + 49 : counter + 88);
-				matrix[x][a.y] = c;
+				matrix[x][a.y] = (counter < 10 ? counter + 48 : counter + 87);
 				counter++;
 			}
 		}
@@ -136,8 +140,8 @@ int get_fin_ind(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin)
 	int f_ind = -1;
 	for (int i = 0; i< vert.size(); i++){
 		vertice &v = vert[i];
-		if (v.x == x_st&&v.y == y_st){ v.min_dist = 0; v.path.push_back(i); continue; }
-		if (v.x == x_fin && v.y == y_fin) { f_ind = i; continue; }
+		if (v.x == x_st && v.y == y_st) { v.min_dist = 0; v.last = 10000000; }
+		if (v.x == x_fin && v.y == y_fin) { f_ind = i; }
 	}
 	return f_ind;
 }
@@ -157,15 +161,14 @@ int min(vector<vertice> v) {
 int Deikstra(int finish, vector<vertice> &vertices) {
     while (1) {
         int a = min(vertices);
+		if (a == finish) return vertices[finish].min_dist;
         if (vertices[a].passed) return -1;
         for (std::pair<int, int> p : vertices[a].adjacent) {
             if (vertices[a].min_dist + p.second < vertices[p.first].min_dist) {
                 vertices[p.first].min_dist = vertices[a].min_dist + p.second;
-                vertices[p.first].path= vertices[a].path;
-                vertices[p.first].path.push_back(a+1);
+                vertices[p.first].last= a;
             }
         }
         vertices[a].passed = true;
-        if (a==finish) return vertices[finish].min_dist;
     }
 }
