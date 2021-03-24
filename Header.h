@@ -43,13 +43,14 @@ vector<std::string> f_processing(std::string name) {
 
 class vertice{
 public:
-	int x;
-	int y;			//coordinates in input matrix
-	int min_dist;
-	bool passed;
+	int x = 0;
+	int y = 0;			//coordinates in input matrix
+	int min_dist = 1000000;
+	bool passed = false;
 	vector<int> path;
 	vector<std::pair<int, int>> adjacent;	//the list of adjacent vertices' index and path len
-	vertice(int x1, int y1) { x = x1; y = y1; min_dist = 1000000; passed = false; }
+	vertice(int x1, int y1) { x = x1; y = y1; }
+	vertice() = default;
 	void n_adj(int v, int n) { adjacent.push_back({v, n}); }	//that's for me, don't warry about)
 };
 
