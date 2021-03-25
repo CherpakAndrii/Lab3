@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "PriorityQueue.h"
 #include <fstream>
 #include <stdlib.h>
 #include <time.h>
@@ -110,13 +111,13 @@ void outp_path(vector<std::string> &matrix, vector<vertice> vert, int finish) {
 		if (a.x == b.x) {
 			for (int y = (a.y < b.y ? (a.y+1) : (a.y-1)); (a.y < b.y ? (y <= b.y) : (y >= b.y)); (a.y < b.y ? (y++) : (y--))) {
 				matrix[a.x][y] = (counter < 10 ? counter + 48 : counter + 87);
-				counter++;
+				counter < 35 ? counter++ : counter = 1;
 			}
 		}
 		else {
 			for (int x = (a.x < b.x ? (a.x + 1) : (a.x - 1)); (a.x < b.x ? (x <= b.x) : (x >= b.x)); (a.x < b.x ? (x++) : (x--))) {
 				matrix[x][a.y] = (counter < 10 ? counter + 48 : counter + 87);
-				counter++;
+				counter<35?counter++:counter=1;
 			}
 		}
 	}
@@ -136,11 +137,11 @@ int find(vector<pair<int, int>> vect, pair<int, int> val) {
 	return -1;
 }
 
-int get_fin_ind(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin){
+int get_fin_ind(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin, int& st_ind){
 	int f_ind = -1;
 	for (int i = 0; i< vert.size(); i++){
 		vertice &v = vert[i];
-		if (v.x == x_st && v.y == y_st) { v.min_dist = 0; v.last = 10000000; }
+		if (v.x == x_st && v.y == y_st) { v.min_dist = 0; v.last = 10000000; st_ind = i; }
 		if (v.x == x_fin && v.y == y_fin) { f_ind = i; }
 	}
 	return f_ind;
@@ -158,7 +159,8 @@ int min(vector<vertice> v) {
     return min_index;
 }
 
-int Deikstra(int finish, vector<vertice> &vertices) {
+int Deikstra(int start, int finish, vector<vertice> &vertices) {
+	PriorityQueue<std::pair<int, int>> q();
     while (1) {
         int a = min(vertices);
 		if (a == finish) return vertices[finish].min_dist;

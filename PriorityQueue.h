@@ -80,8 +80,8 @@ inline void PriorityQueue<T>::insert() {
 
 inline void PriorityQueue<std::pair<int, int>>::insert() {
 	size_t index = sz - 1;
-	while (index >= 0 and data[index - 1].second > data[index]second) {
-		T buf = data[index];
+	while (index >= 0 and data[index - 1].second < data[index].second) {
+		std::pair<int, int> buf = data[index];
 		data[index] = data[index - 1];
 		data[index - 1] = buf;
 		index--;
