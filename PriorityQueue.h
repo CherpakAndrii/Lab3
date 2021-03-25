@@ -32,7 +32,7 @@ template <typename T>
 inline void PriorityQueue<T>::push(T val) {
 	data = (T*)realloc((void*)data, ++sz * sizeof(T));
 	data[sz - 1] = val;
-	insert();
+	if (sz>1) insert();
 }
 
 template <typename T>
