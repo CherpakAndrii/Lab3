@@ -48,7 +48,7 @@ public:
 	int y = 0;			//coordinates in input matrix
 	int min_dist = 1000000;
 	bool passed = false;
-	int last = 1000000;
+	int last;
 	vector<std::pair<int, int>> adjacent;	//the list of adjacent vertices' index and path len
 	vertice(int x1, int y1) { x = x1; y = y1; }
 	vertice() = default;
@@ -141,35 +141,15 @@ int get_fin_ind(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin,
 	int f_ind = -1;
 	for (int i = 0; i< vert.size(); i++){
 		vertice &v = vert[i];
-<<<<<<< Updated upstream
 		if (v.x == x_st && v.y == y_st) { v.min_dist = 0; v.last = 10000000; st_ind = i; }
-=======
-		if (v.x == x_st && v.y == y_st) { v.min_dist = 0; }
->>>>>>> Stashed changes
 		if (v.x == x_fin && v.y == y_fin) { f_ind = i; }
 	}
 	return f_ind;
 }
 
-<<<<<<< Updated upstream
 int Deikstra(int start, int finish, vector<vertice> &vertices) {
 	PriorityQueue<std::pair<int, int>> q;
 	q.push({ start, 0 });
-=======
-int min(vector<vertice> v) {
-    int min_index = 0;
-    for (int i = 0; i < int(v.size()); i++) {
-        min_index = i;
-        if (!v[i].passed) break;
-    }
-    for (int i = 0; i < int(v.size()); i++) {
-        if (!v[i].passed && v[i].min_dist < v[min_index].min_dist) min_index = i;
-    }
-    return min_index;
-}
-
-int Deikstra(int finish, vector<vertice> &vertices) {
->>>>>>> Stashed changes
     while (1) {
 		if (q.empty()) return -1;
         int a = q.pop().first;
