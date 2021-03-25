@@ -147,28 +147,18 @@ int get_fin_ind(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin,
 	return f_ind;
 }
 
-int min(vector<vertice> v) {
-    int min_index;
-    for (int i = 0; i < int(v.size()); i++) {
-        min_index = i;
-        if (!v[i].passed) break;
-    }
-    for (int i = 0; i < int(v.size()); i++) {
-        if (!v[i].passed && v[i].min_dist < v[min_index].min_dist) min_index = i;
-    }
-    return min_index;
-}
-
 int Deikstra(int start, int finish, vector<vertice> &vertices) {
-	PriorityQueue<std::pair<int, int>> q();
+	PriorityQueue<std::pair<int, int>> q;
+	q.push({ start, 0 });
     while (1) {
-        int a = min(vertices);
+		if (q.empty()) return -1;
+        int a = q.pop().first;
 		if (a == finish) return vertices[finish].min_dist;
-        if (vertices[a].passed) return -1;
         for (std::pair<int, int> p : vertices[a].adjacent) {
             if (vertices[a].min_dist + p.second < vertices[p.first].min_dist) {
                 vertices[p.first].min_dist = vertices[a].min_dist + p.second;
                 vertices[p.first].last= a;
+				if (!vertices[p.first].passed) q.push({ p.first , vertices[p.first].min_dist });
             }
         }
         vertices[a].passed = true;
