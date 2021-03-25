@@ -11,6 +11,7 @@ int main() {
 	cout<<"Enter the coordinates of the end point: "<<endl;
 	cout<<"\tx = "; cin>>x_fin; cout<<endl;
 	cout<<"\ty = "; cin>>y_fin; cout<<endl;
+	time_t t0 = clock();
 	if (matr[x_st][y_st]=='X'|| matr[x_fin][y_fin] == 'X') { cout << "The path doesn't exist!" << endl; exit(0); }
 	vector<vertice> vertices = get_vertices(matr, x_st, y_st, x_fin, y_fin);
 	fin_ind = get_fin_ind(vertices, x_st, y_st, x_fin, y_fin);
@@ -19,5 +20,5 @@ int main() {
 	if (dist < 0 || dist == 1000000) { cout << "The path doesn't exist!" << endl; exit(0); }
 	matr[x_st][y_st] = 48;
 	outp_path(matr, vertices, fin_ind);
+	cout<<"Search time: "<<float(clock()-t0)/CLOCKS_PER_SEC<<" seconds, path length: "<< dist <<endl;
 }
-
