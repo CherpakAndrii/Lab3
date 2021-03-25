@@ -32,7 +32,7 @@ template <typename T>
 inline void PriorityQueue<T>::push(T val) {
 	data = (T*)realloc((void*)data, ++sz * sizeof(T));
 	data[sz - 1] = val;
-	if (sz>1) insert();
+	insert();
 }
 
 template <typename T>
@@ -70,7 +70,7 @@ inline void PriorityQueue<T>::swap(PriorityQueue<T>& another) {
 template <typename T>
 inline void PriorityQueue<T>::insert() {
 	size_t index = sz - 1;
-	while (index >= 0 and data[index - 1] > data[index]) {
+	while (index > 0 and data[index - 1] > data[index]) {
 		T buf = data[index];
 		data[index] = data[index - 1];
 		data[index - 1] = buf;
@@ -80,7 +80,7 @@ inline void PriorityQueue<T>::insert() {
 
 inline void PriorityQueue<std::pair<int, int>>::insert() {
 	size_t index = sz - 1;
-	while (index >= 0 and data[index - 1].second < data[index].second) {
+	while (index > 0 and data[index - 1].second < data[index].second) {
 		std::pair<int, int> buf = data[index];
 		data[index] = data[index - 1];
 		data[index - 1] = buf;
