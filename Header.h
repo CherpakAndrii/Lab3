@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <math.h>
 #include <vector>
 #include <iostream>
 #include "PriorityQueue.h"
@@ -148,7 +149,7 @@ int get_fin_ind(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin,
 }
 
 int heur(int cur, int goal, vector<vertice> vert) {
-	return abs(vert[cur].x - vert[goal].x) + abs(vert[cur].y - vert[goal].y);
+	return pow(vert[cur].x - vert[goal].x, 2) + pow(vert[cur].y - vert[goal].y, 2);
 }
 
 int A_star(int start, int finish, vector<vertice> &vertices) {
