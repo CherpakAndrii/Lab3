@@ -5,7 +5,6 @@ class PriorityQueue {
 private:
 	T* data = nullptr;
 	size_t sz;
-	size_t cp;
 	void insert();
 public:
 	PriorityQueue();
@@ -20,8 +19,7 @@ public:
 
 template <typename T>
 inline PriorityQueue<T>::PriorityQueue() {
-	data = new T[10];
-	cp = 10;
+	data = new T[0];
 	sz = 0;
 }
 
@@ -32,8 +30,7 @@ inline PriorityQueue<T>::~PriorityQueue() {
 
 template <typename T>
 inline void PriorityQueue<T>::push(T val) { 
-	if (++sz >= cp * 0.8) data = (T*)realloc((void*)data, cp * 2 * sizeof(T));
-	cp *= 2;
+	data = (T*)realloc((void*)data, ++sz * sizeof(T));
 	data[sz - 1] = val;
 	insert();
 }
@@ -41,6 +38,7 @@ inline void PriorityQueue<T>::push(T val) {
 template <typename T>
 inline T PriorityQueue<T>::pop() {
 	T val = data[--sz];
+	data = (T*)realloc((void*)data, sz * sizeof(T));
 	return val;
 }
 
@@ -63,13 +61,10 @@ template <typename T>
 inline void PriorityQueue<T>::swap(PriorityQueue<T>& another) {
 	auto buffData = data;
 	auto buffSz = sz;
-	auto buffCp = cp;
 	data = another.data;
 	sz = another.sz;
-	cp = another.cp;
 	another.data = buffData;
 	another.sz = buffSz;
-	another.cp = buffCp;
 }
 
 template <typename T>
