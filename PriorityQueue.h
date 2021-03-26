@@ -49,7 +49,7 @@ inline T PriorityQueue<T>::top() {
 
 template <typename T>
 inline bool PriorityQueue<T>::empty() {
-	return (sz > 0);
+	return (sz == 0);
 }
 
 template <typename T>

@@ -64,7 +64,7 @@ inline size_t Queue<T>::size() {
 
 template <typename T>
 inline bool Queue<T>::empty() {
-	return (all - used) > 0;
+	return (all - used) == 0;
 }
 
 template <typename T>
