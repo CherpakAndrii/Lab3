@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 
+//bad alloc значит bad alloc, ничо не знаю
 template <typename T>
 class vector {
 public:
