@@ -9,6 +9,7 @@ private:
 	T* data = nullptr;
 	size_t used;
 	size_t all;
+	size_t cp;
 public:
 	Queue();
 	~Queue();
@@ -17,6 +18,7 @@ public:
 	T front();
 	T back();
 	size_t size();
+	size_t capacity();
 	bool empty();
 	void swap(Queue<T>& another);
 };
@@ -25,9 +27,10 @@ public:
 
 template <typename T>
 inline Queue<T>::Queue() {
-	data = new T[0];
+	data = new T[1000];
 	all = 0;
 	used = 0;
+	cp = 1000;
 }
 
 template <typename T>
@@ -37,7 +40,11 @@ inline Queue<T>::~Queue() {
 
 template <typename T>
 inline void Queue<T>::push(T val) {
-	data = (T*)realloc(data, ++all * sizeof(T));
+	if (all >= cp) {
+		new_cp = 2 * cp;
+		data = (T*)realloc(data, new_cp * sizeof(T));
+		cp = new_cp;
+	}
 	data[(all - used) - 1] = val;
 }
 
@@ -68,14 +75,22 @@ inline bool Queue<T>::empty() {
 }
 
 template <typename T>
+inline size_t Queue<T>::capacity() {
+	return cp;
+}
+
+template <typename T>
 inline void Queue<T>::swap(Queue<T>& another) {
 	auto buffData = data;
 	auto buffAll = all;
 	auto buffUsed = used;
+	auto buffCp = cp;
 	data = another.data;
 	all = another.all;
 	used = another.used;
+	cp = another.cp;
 	another.data = buffData;
 	another.all = buffAll;
 	another.used = buffUsed;
+	another.cp = buffCp;
 }

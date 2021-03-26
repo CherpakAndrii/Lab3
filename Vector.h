@@ -7,7 +7,7 @@
 template <typename T>
 class vector {
 public:
-    vector() = default;
+    vector();
     explicit vector(size_t size);
     vector(const vector& another);
     ~vector();
@@ -45,10 +45,17 @@ private:
 };
 
 template <typename T>
+inline vector<T>::vector() {
+    sz = 0;
+    cp = 1000;
+    data = new T[cp]
+}
+
+template <typename T>
 inline vector<T>::vector(size_t nsize) {
     sz = nsize;
-    cp = nsize;
-    data = new T[nsize];
+    cp = sz > 1000 ? sz : 1000;
+    data = new T[cp];
 }
 
 template <typename T>
