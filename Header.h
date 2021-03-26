@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <vector>
+#include "Vector.h"
 #include <iostream>
 #include "PriorityQueue.h"
 #include <fstream>
@@ -8,7 +8,6 @@
 #include <time.h>
 #include <stdio.h>
 
-using namespace std;
 
 vector<std::string> readlines(std::string name){
 	std::ifstream f(name);
@@ -57,16 +56,16 @@ public:
 
 int is_free(vector<std::string> matr, int xs, int ys, int xf, int yf) {
 	if (xs == xf) {
-		int y1 = min(ys, yf);
-		int y2 = max(ys, yf);
+		int y1 = std::min(ys, yf);
+		int y2 = std::max(ys, yf);
 		for (int j = y1; j < y2; j++) {
 			if (matr[xs][j] == 'X')return 0;
 		}
 		return y2 - y1;
 	}
 	else if (ys == yf) {
-		int x1 = min(xs, xf);
-		int x2 = max(xs, xf);
+		int x1 = std::min(xs, xf);
+		int x2 = std::max(xs, xf);
 		for (int i = x1; i < x2; i++) {
 			if (matr[i][ys] == 'X')return 0;
 		}
@@ -124,13 +123,13 @@ void outp_path(vector<std::string> &matrix, vector<vertice> vert, int finish) {
 
 	for (int i = 0; i < int(matrix.size()); i++) {
 		for (int j = 0; j < matrix[i].length(); j++) {
-			cout << matrix[i][j] << " ";
+			std::cout << matrix[i][j] << " ";
 		}
-		cout << endl;
+		std::cout << std::endl;
 	}
 }
 
-int find(vector<pair<int, int>> vect, pair<int, int> val) {
+int find(vector<std::pair<int, int>> vect, std::pair<int, int> val) {
 	for (int i = 0; i < vect.size(); i++) {
 		if (vect[i].first == val.first && vect[i].second == val.second) return i;
 	}
@@ -164,3 +163,4 @@ int Deikstra(int start, int finish, vector<vertice> &vertices) {
         vertices[a].passed = true;
     }
 }
+
