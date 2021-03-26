@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "Vector.h"
+#include <vector>
 #include <iostream>
 #include "PriorityQueue.h"
 #include <fstream>
@@ -8,6 +8,7 @@
 #include <time.h>
 #include <stdio.h>
 
+using namespace std;
 
 vector<std::string> readlines(std::string name){
 	std::ifstream f(name);
@@ -146,7 +147,11 @@ int get_fin_ind(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin,
 	return f_ind;
 }
 
-int Deikstra(int start, int finish, vector<vertice> &vertices) {
+int heur(int cur, int goal, vector<vertice> vert) {
+	return abs(vert[cur].x - vert[goal].x) + abs(vert[cur].y - vert[goal].y);
+}
+
+int A_star(int start, int finish, vector<vertice> &vertices) {
 	PriorityQueue<std::pair<int, int>> q;
 	q.push({ start, 0 });
     while (1) {
@@ -157,10 +162,9 @@ int Deikstra(int start, int finish, vector<vertice> &vertices) {
             if (vertices[a].min_dist + p.second < vertices[p.first].min_dist) {
                 vertices[p.first].min_dist = vertices[a].min_dist + p.second;
                 vertices[p.first].last= a;
-				if (!vertices[p.first].passed) q.push({ p.first , vertices[p.first].min_dist });
+				if (!vertices[p.first].passed) q.push({ p.first , vertices[p.first].min_dist+heur(p.first, finish, vertices) });
             }
         }
         vertices[a].passed = true;
     }
 }
-
