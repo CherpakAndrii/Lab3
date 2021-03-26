@@ -131,12 +131,6 @@ void outp_path(vector<std::string> &matrix, vector<vertice> vert, int finish) {
 	}
 }
 
-int find(vector<std::pair<int, int>> vect, std::pair<int, int> val) {
-	for (int i = 0; i < vect.size(); i++) {
-		if (vect[i].first == val.first && vect[i].second == val.second) return i;
-	}
-	return -1;
-}
 
 int get_fin_ind(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin, int& st_ind){
 	int f_ind = -1;
@@ -148,12 +142,12 @@ int get_fin_ind(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin,
 	return f_ind;
 }
 
-int heur(int cur, int goal, vector<vertice> vert) {
+double heur(int cur, int goal, vector<vertice> vert) {
 	return pow(vert[cur].x - vert[goal].x, 2) + pow(vert[cur].y - vert[goal].y, 2);
 }
 
 int A_star(int start, int finish, vector<vertice> &vertices) {
-	PriorityQueue<std::pair<int, int>> q;
+	PriorityQueue<std::pair<int, double>> q;
 	q.push({ start, 0 });
     while (1) {
 		if (q.empty()) return -1;
