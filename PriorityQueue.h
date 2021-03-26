@@ -5,23 +5,35 @@ class PriorityQueue {
 private:
 	T* data = nullptr;
 	size_t sz;
+	size_t cp;
 	void insert();
 public:
 	PriorityQueue();
+	PriorityQueue(size_t cap);
 	~PriorityQueue();
 	void push(T val);
 	T pop();
 	T top();
 	bool empty();
 	size_t size();
+	size_t capacity();
 	void swap(PriorityQueue<T>& another);
 };
 
 template <typename T>
 inline PriorityQueue<T>::PriorityQueue() {
-	data = new T[0];
+	data = new T[1000];
+	cp = 1000;
 	sz = 0;
 }
+
+template <typename T>
+inline PriorityQueue<T>::PriorityQueue(size_t ncap) {
+	data = new T[ncap];
+	cp = ncap;
+	sz = 0;
+}
+
 
 template <typename T>
 inline PriorityQueue<T>::~PriorityQueue() {
@@ -29,16 +41,18 @@ inline PriorityQueue<T>::~PriorityQueue() {
 }
 
 template <typename T>
-inline void PriorityQueue<T>::push(T val) { 
-	data = (T*)realloc((void*)data, ++sz * sizeof(T));
-	data[sz - 1] = val;
+inline void PriorityQueue<T>::push(T val) {
+	if (sz >= cp) {
+		size_t new_cp = 2 * cp;
+		data = (T*)realloc((void*)data, new_cp * sizeof(T));
+	}
+	data[sz++] = val;
 	insert();
 }
 
 template <typename T>
 inline T PriorityQueue<T>::pop() {
 	T val = data[--sz];
-	data = (T*)realloc((void*)data, sz * sizeof(T));
 	return val;
 }
 
@@ -58,13 +72,21 @@ inline size_t PriorityQueue<T>::size() {
 }
 
 template <typename T>
+inline size_t PriorityQueue<T>::capacity() {
+	return cp;
+}
+
+template <typename T>
 inline void PriorityQueue<T>::swap(PriorityQueue<T>& another) {
 	auto buffData = data;
 	auto buffSz = sz;
+	auto buffCp = cp;
 	data = another.data;
 	sz = another.sz;
+	cp = another.cp;
 	another.data = buffData;
 	another.sz = buffSz;
+	another.cp = buffCp;
 }
 
 template <typename T>
