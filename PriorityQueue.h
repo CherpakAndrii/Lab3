@@ -41,7 +41,11 @@ inline PriorityQueue<T>::~PriorityQueue() {
 }
 
 template <typename T>
+<<<<<<< HEAD
 inline void PriorityQueue<T>::push(T val) { 
+=======
+inline void PriorityQueue<T>::push(T val) {
+>>>>>>> a-star
 	if (sz >= cp) {
 		size_t new_cp = 2 * cp;
 		data = (T*)realloc((void*)data, new_cp * sizeof(T));
@@ -100,10 +104,10 @@ inline void PriorityQueue<T>::insert() {
 	}
 }
 
-inline void PriorityQueue<std::pair<int, int>>::insert() {
+inline void PriorityQueue<std::pair<int, double>>::insert() {
 	size_t index = sz - 1;
 	while (index > 0 and data[index - 1].second < data[index].second) {
-		std::pair<int, int> buf = data[index];
+		std::pair<int, double> buf = data[index];
 		data[index] = data[index - 1];
 		data[index - 1] = buf;
 		index--;

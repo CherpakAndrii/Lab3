@@ -14,9 +14,14 @@ int main() {
 	vector<vertice> vertices = get_vertices(matr, x_st, y_st, x_fin, y_fin);
 	fin_ind = get_fin_ind(vertices, x_st, y_st, x_fin, y_fin, st_ind);
 	if (fin_ind<0) { std::cout << "Error" << std::endl; exit(0); }
+	time_t t1 = clock();
 	dist = A_star(st_ind, fin_ind, vertices);
+	time_t t2 = clock();
+	std::cout << "Path search time: " << double(t2 - t1) / CLOCKS_PER_SEC << " seconds" << endl;
 	if (dist < 0 || dist == 1000000) { std::cout << "The path doesn't exist!" << std::endl; exit(0); }
 	matr[x_st][y_st] = 48;
 	outp_path(matr, vertices, fin_ind);
-	std::cout<<"Search time: "<<float(clock()-t0)/CLOCKS_PER_SEC<<" seconds, path length: "<< dist << std::endl;
+	std::cout << "Path output time: " << double(clock() - t2) / CLOCKS_PER_SEC << " seconds"<<std::endl;
+	std::cout << "Execution time: " << double(clock() - t0) / CLOCKS_PER_SEC << " seconds, path length: " << dist << std::endl;
+
 }
