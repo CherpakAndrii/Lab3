@@ -41,11 +41,7 @@ inline PriorityQueue<T>::~PriorityQueue() {
 }
 
 template <typename T>
-<<<<<<< HEAD
 inline void PriorityQueue<T>::push(T val) { 
-=======
-inline void PriorityQueue<T>::push(T val) {
->>>>>>> a-star
 	if (sz >= cp) {
 		size_t new_cp = 2 * cp;
 		data = (T*)realloc((void*)data, new_cp * sizeof(T));
