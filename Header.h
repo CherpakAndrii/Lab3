@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include "PriorityQueue.h"
+#include "Stack.h"
 #include <fstream>
 #include <stdlib.h>
 #include <time.h>
@@ -56,8 +57,9 @@ public:
 	void n_adj(int v, int n) { adjacent.push_back({v, n}); }	//that's for me, don't warry about)
 };
 
-int is_free(vector<std::string> matr, int xs, int ys, int xf, int yf) {
-	if (xs == xf) {
+int is_adj(vector<std::string> matr, int xs, int ys, int xf, int yf) {
+	if (xs != xf and ys != yf) return 0;
+	else if (xs == xf) {
 		int y1 = std::min(ys, yf);
 		int y2 = std::max(ys, yf);
 		for (int j = y1; j < y2; j++) {
@@ -65,7 +67,7 @@ int is_free(vector<std::string> matr, int xs, int ys, int xf, int yf) {
 		}
 		return y2 - y1;
 	}
-	else if (ys == yf) {
+	else {
 		int x1 = std::min(xs, xf);
 		int x2 = std::max(xs, xf);
 		for (int i = x1; i < x2; i++) {
@@ -73,10 +75,10 @@ int is_free(vector<std::string> matr, int xs, int ys, int xf, int yf) {
 		}
 		return x2 - x1;
 	}
-	else return 0;
 }
 
 vector<vertice> get_vertices(vector<std::string> matr, int x_st, int y_st, int x_fin, int y_fin) {
+	time_t t0 = clock();
 	vector<vertice> vertice_list;
 	for (int i = 1; i < int(matr.size()-1); i++) {
 		for (int j = 1; j < int(matr[i].size()-1); j++) {
@@ -86,45 +88,54 @@ vector<vertice> get_vertices(vector<std::string> matr, int x_st, int y_st, int x
 			}
 		}
 	}
+	time_t t1 = clock();
+	std::cout << "Vertice search time: " << double(t1 - t0) / CLOCKS_PER_SEC <<" seconds" << std::endl;
 	for (int i = 0; i < int(vertice_list.size()); i++) {
 		for (int j = i+1; j < int(vertice_list.size()); j++) {
-			int w = is_free(matr, vertice_list[i].x, vertice_list[i].y, vertice_list[j].x, vertice_list[j].y);
-			if ((vertice_list[i].y == vertice_list[j].y || vertice_list[i].x == vertice_list[j].x) && w) {
+			int w = is_adj(matr, vertice_list[i].x, vertice_list[i].y, vertice_list[j].x, vertice_list[j].y);
+			if (w) {
 				vertice_list[i].n_adj(j, w);
 				vertice_list[j].n_adj(i, w);
 			}
 		}
 	}
+	cout << "Edge search time: " << double(clock() - t1) / CLOCKS_PER_SEC <<" seconds" << endl;
 	return vertice_list;
 }
 
+char count(int& counter) {
+	char val = (counter < 10 ? counter + 48 : counter + 87);
+	counter < 35 ? counter++ : counter = 1;
+	return val;
+}
+
 void outp_path(vector<std::string> &matrix, vector<vertice> vert, int finish) {
-	vector<int> path;
-	int last = finish;
+	Stack<int> path;
+	int m, n, last = finish;
 	while (last < 999999) {
-		path.push_back(last);
+		path.push(last);
 		last = vert[last].last;
 	}
 	int counter = 1;
-	for (int i = int(path.size() - 1); i > 0; i--) {
-		vertice a = vert[path[i]];
-		vertice b = vert[path[i-1]];
+	m = path.pop();
+	while (path.size()) {
+		n = m; m = path.pop();
+		vertice a = vert[n];
+		vertice b = vert[m];
 		if (a.x == b.x) {
 			for (int y = (a.y < b.y ? (a.y+1) : (a.y-1)); (a.y < b.y ? (y <= b.y) : (y >= b.y)); (a.y < b.y ? (y++) : (y--))) {
-				matrix[a.x][y] = (counter < 10 ? counter + 48 : counter + 87);
-				counter < 35 ? counter++ : counter = 1;
+				matrix[a.x][y] = count(counter);
 			}
 		}
 		else {
 			for (int x = (a.x < b.x ? (a.x + 1) : (a.x - 1)); (a.x < b.x ? (x <= b.x) : (x >= b.x)); (a.x < b.x ? (x++) : (x--))) {
-				matrix[x][a.y] = (counter < 10 ? counter + 48 : counter + 87);
-				counter<35?counter++:counter=1;
+				matrix[x][a.y] = count(counter);
 			}
 		}
 	}
 
 	for (int i = 0; i < int(matrix.size()); i++) {
-		for (int j = 0; j < matrix[i].length(); j++) {
+		for (int j = 0; j < int(matrix[i].length()); j++) {
 			std::cout << matrix[i][j] << " ";
 		}
 		std::cout << std::endl;
@@ -134,7 +145,7 @@ void outp_path(vector<std::string> &matrix, vector<vertice> vert, int finish) {
 
 int get_fin_ind(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin, int& st_ind){
 	int f_ind = -1;
-	for (int i = 0; i< vert.size(); i++){
+	for (int i = 0; i< int(vert.size()); i++){
 		vertice &v = vert[i];
 		if (v.x == x_st && v.y == y_st) { v.min_dist = 0; v.last = 10000000; st_ind = i; }
 		if (v.x == x_fin && v.y == y_fin) { f_ind = i; }
@@ -143,7 +154,7 @@ int get_fin_ind(vector<vertice> &vert, int x_st, int y_st, int x_fin, int y_fin,
 }
 
 double heur(int cur, int goal, vector<vertice> vert) {
-	return pow(vert[cur].x - vert[goal].x, 2) + pow(vert[cur].y - vert[goal].y, 2);
+	return sqrt(pow(vert[cur].x - vert[goal].x, 2) + pow(vert[cur].y - vert[goal].y, 2));
 }
 
 int A_star(int start, int finish, vector<vertice> &vertices) {
