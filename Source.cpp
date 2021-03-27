@@ -2,7 +2,7 @@
 
 int main() {
 	int x_st, y_st, x_fin, y_fin, st_ind = -1, fin_ind, dist;
-	vector<std::string> matr = f_processing("inp.txt");
+	vector<std::string> matr = f_processing("inp2.txt");
 	std::cout<<"Enter the coordinates of the starting point: "<< std::endl;
 	std::cout<<"\tx = "; std::cin>>x_st; std::cout<< std::endl;
 	std::cout<<"\ty = "; std::cin>>y_st; std::cout<< std::endl;
