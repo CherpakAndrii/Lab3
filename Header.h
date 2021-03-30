@@ -168,7 +168,8 @@ void outp_path(vector<std::string> &matrix, vector<vertice> vert, int finish) {
 
 	for (int i = 0; i < int(matrix.size()); i++) {
 		for (int j = 0; j < int(matrix[i].length()); j++) {
-			std::cout << matrix[i][j] << " ";
+			if (matrix[i][j]=='X' or matrix[i][j] == ' ') std::cout << matrix[i][j] << " ";
+			else std::cout << "\033[1;35m"<<matrix[i][j]<<"\033[0m" << " ";
 		}
 		std::cout << std::endl;
 	}
