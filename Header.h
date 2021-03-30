@@ -80,7 +80,7 @@ int is_adj(vector<std::string> matr, int xs, int ys, int xf, int yf) {
 vector<vertice> get_vertices(vector<std::string> matr, int x_st, int y_st, int x_fin, int y_fin) {
 	time_t t0 = clock();
 	vector<vertice> vertice_list;
-	/*int count = 0;
+	int count = 0;
 	int** n_matr = new int* [matr.size()];
 	for (int i = 0; i < int(matr.size()); i++) {
 		n_matr[i] = new int[matr[0].length()];
@@ -88,63 +88,49 @@ vector<vertice> get_vertices(vector<std::string> matr, int x_st, int y_st, int x
 			if (matr[i][j]==' ') n_matr[i][j] = -1;
 			else n_matr[i][j] = -2;
 		}
-	}*/
+	}
 
 	for (int i = 1; i < int(matr.size()-1); i++) {
 		for (int j = 1; j < int(matr[i].length()-1); j++) {
 			if (matr[i][j] == ' ' && ((i == x_st&&j==y_st|| i == x_fin && j == y_fin)||!(matr[i-1][j]==' ' && matr[i+1][j]==' ' || matr[i][j-1] == ' ' && matr[i][j+1] == ' ')|| (matr[i - 1][j] == ' ' && matr[i + 1][j] == ' ' && (matr[i][j - 1] == ' ' || matr[i][j + 1] == ' '))|| ((matr[i - 1][j] == ' ' || matr[i + 1][j] == ' ') && matr[i][j - 1] == ' ' && matr[i][j + 1] == ' '))) {
 				vertice v(i, j);
 				vertice_list.push_back(v);
-				/*n_matr[i][j] = count;
-				count++;*/
+				n_matr[i][j] = count++;
 			}
 		}
 	}
 	time_t t1 = clock();
 	std::cout << "Vertice search time: " << double(t1 - t0) / CLOCKS_PER_SEC <<" seconds" << std::endl;
-	for (int i = 0; i < int(vertice_list.size()); i++) {
-		for (int j = i+1; j < int(vertice_list.size()); j++) {
-			int w = is_adj(matr, vertice_list[i].x, vertice_list[i].y, vertice_list[j].x, vertice_list[j].y);
-			if (w) {
-				vertice_list[i].n_adj(j, w);
-				vertice_list[j].n_adj(i, w);
-			}
-		}
-	}
-	/*for (int i = 0; i < vertice_list.size(); i++) {
+	for (int i = 0; i < vertice_list.size(); i++) {
 		if (n_matr[vertice_list[i].x + 1][vertice_list[i].y]+2) {
 			int n = 1;
-			while (!n_matr[vertice_list[i].x + n][vertice_list[i].y]+1) n++;
+			while (n_matr[vertice_list[i].x + n][vertice_list[i].y] == -1) n++;
 			int j = n_matr[vertice_list[i].x + n][vertice_list[i].y];
-			int w = vertice_list[j].x - vertice_list[i].x;
-			vertice_list[i].n_adj(j, w);
-			vertice_list[j].n_adj(i, w);
+			vertice_list[i].n_adj(j, n);
+			vertice_list[j].n_adj(i, n);
 		}
 		if (n_matr[vertice_list[i].x - 1][vertice_list[i].y]+2) {
 			int n = 1;
-			while (!n_matr[vertice_list[i].x - n][vertice_list[i].y] +1) n++;
+			while (n_matr[vertice_list[i].x - n][vertice_list[i].y] == -1) n++;
 			int j = n_matr[vertice_list[i].x - n][vertice_list[i].y];
-			int w = vertice_list[i].x - vertice_list[j].x;
-			vertice_list[i].n_adj(j, w);
-			vertice_list[j].n_adj(i, w);
+			vertice_list[i].n_adj(j, n);
+			vertice_list[j].n_adj(i, n);
 		}
 		if (n_matr[vertice_list[i].x][vertice_list[i].y + 1]+2) {
 			int n = 1;
-			while (!n_matr[vertice_list[i].x][vertice_list[i].y+n]+1) n++;
+			while (n_matr[vertice_list[i].x][vertice_list[i].y+n] == -1) n++;
 			int j = n_matr[vertice_list[i].x][vertice_list[i].y+n];
-			int w = vertice_list[j].y - vertice_list[i].y;
-			vertice_list[i].n_adj(j, w);
-			vertice_list[j].n_adj(i, w);
+			vertice_list[i].n_adj(j, n);
+			vertice_list[j].n_adj(i, n);
 		}
 		if (n_matr[vertice_list[i].x][vertice_list[i].y-1] + 2) {
 			int n = 1;
-			while (!n_matr[vertice_list[i].x][vertice_list[i].y-n]+1) n++;
+			while (n_matr[vertice_list[i].x][vertice_list[i].y-n]==-1) n++;
 			int j = n_matr[vertice_list[i].x][vertice_list[i].y-n];
-			int w = vertice_list[i].y - vertice_list[j].y;
-			vertice_list[i].n_adj(j, w);
-			vertice_list[j].n_adj(i, w);
+			vertice_list[i].n_adj(j, n);
+			vertice_list[j].n_adj(i, n);
 		}
-	}*/				//на 113 вершині(7:13 в матриці) чомусь виходить за межі вектора(
+	}				//на 113 вершині(7:13 в матриці) чомусь виходить за межі вектора(
 	cout << "Edge search time: " << double(clock() - t1) / CLOCKS_PER_SEC <<" seconds" << endl;
 	return vertice_list;
 }
